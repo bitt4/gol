@@ -2,6 +2,20 @@
 #include <iostream>
 #include <cstdlib>
 
+#ifdef _WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
+
+void sleep(int miliseconds){
+#ifdef _WIN32
+    Sleep(miliseconds);
+#else
+    usleep(miliseconds * 1000);
+#endif
+}
+
 int main(int argc, char *argv[]){
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -31,6 +45,7 @@ int main(int argc, char *argv[]){
 
     SDL_Event e;
     bool quit = false;
+    const int SPEED = 60;    /* Updates per second */
 
     while(!quit){
         if(SDL_WaitEvent(&e)){
@@ -41,6 +56,10 @@ int main(int argc, char *argv[]){
             default: {}
             }
         }
+        // gol.update();    // Not implemented
+        // gol.render();    // Not implemented
+        SDL_RenderPresent(renderer);
+        sleep(1000 / SPEED);
     }
 
     SDL_DestroyRenderer(renderer);
