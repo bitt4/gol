@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cstdlib>
 
+#include "Gol.hpp"
+
 #ifdef _WIN32
 #include <Windows.h>
 #else
