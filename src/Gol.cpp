@@ -5,8 +5,12 @@ Gol::Gol(int width, int height, int cell_width, bool* initial_state)
      height(height),
      cell_width(cell_width)
 {
-    this->first_grid = (bool*)calloc(width * height, sizeof(bool));
-    this->second_grid = (bool*)calloc(width * height, sizeof(bool));
+    int size_of_grid = width * height;
+
+    this->first_grid = (bool*)calloc(size_of_grid, sizeof(bool));
+    this->second_grid = (bool*)calloc(size_of_grid, sizeof(bool));
+
+    memcpy(first_grid, initial_state, size_of_grid);
 }
 
 Gol::~Gol(){
