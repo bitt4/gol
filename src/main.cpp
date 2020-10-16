@@ -58,9 +58,9 @@ int main(int argc, char *argv[]){
             default: {}
             }
         }
-        // gol.update();    // Not implemented
-        // gol.render();    // Not implemented
+        // gol.render(renderer);    // Not implemented
         SDL_RenderPresent(renderer);
+        // gol.update();    // Not implemented
         sleep(1000 / SPEED);
     }
 
