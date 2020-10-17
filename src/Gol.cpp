@@ -20,22 +20,39 @@ Gol::~Gol(){
     free(this->second_grid);
 }
 
+inline int mod(int a, int b){
+    int res = a % b;
+    return res >= 0 ? res : res + b;
+}
+
 int Gol::get_nearby_cells(int x, int y){
-    /* Not implemented so for now */ return 0;
+    int nearby_cells = 0;
+
+    for(int ry = -1; ry < 2; ry++){
+        for(int rx = -1; rx < 2; rx++){
+            if(!(rx == 0 && ry == 0)){
+                if(this->second_grid[ mod(y + ry, this->height) * this->height + mod(x + rx, this->width) ])
+                    nearby_cells++;
+            }
+        }
+    }
+
+    return nearby_cells;
 }
 
 void Gol::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color){
     SDL_Rect cell_rectangle;
-    cell_rectangle.x = x;
-    cell_rectangle.y = y;
+    cell_rectangle.x = x * this->cell_width;
+    cell_rectangle.y = y * this->cell_width;
     cell_rectangle.w = this->cell_width;
     cell_rectangle.h = this->cell_width;
 
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderFillRect(renderer, cell_rectangle);
+    SDL_RenderFillRect(renderer, &cell_rectangle);
 }
 
 void Gol::update(){
+    int size_of_grid = this->width * this->height;
     memcpy(second_grid, first_grid, size_of_grid);
 
     for(int y = 0; y < this->height; y++){
