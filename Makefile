@@ -14,4 +14,8 @@ EXE=gol
 	$(CXX) src/main.cpp src/Gol.cpp $(LIBS) -o $(EXE) $(FLAGS)
 
 clean:
+ifeq ($(OS),Windows_NT)
+	del $(EXE).exe
+else
 	rm -f $(EXE)
+endif
