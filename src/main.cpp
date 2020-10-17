@@ -22,11 +22,36 @@ int main(int argc, char *argv[]){
 
     SDL_Init(SDL_INIT_VIDEO);
 
+    bool initial_state[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+                            0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+                            0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+                            0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+                            0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+                            0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+                            0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    };
+
+    int width = 17;
+    int height = 17;
+    int cell_size = 50;
+
+    Gol gol(width, height, cell_size, initial_state);
+
     SDL_Window *window = SDL_CreateWindow("Game of Life",
                                           SDL_WINDOWPOS_UNDEFINED,
                                           SDL_WINDOWPOS_UNDEFINED,
-                                          1280,
-                                          720,
+                                          width * cell_size,
+                                          height * cell_size,
                                           SDL_WINDOW_SHOWN);
 
     if(window == NULL){
@@ -47,10 +72,10 @@ int main(int argc, char *argv[]){
 
     SDL_Event e;
     bool quit = false;
-    const int SPEED = 60;    /* Updates per second */
+    const int SPEED = 5;    /* Updates per second */
 
     while(!quit){
-        if(SDL_WaitEvent(&e)){
+        while(SDL_PollEvent(&e)){
             switch(e.type){
             case SDL_QUIT:
                 quit = true;
@@ -58,9 +83,9 @@ int main(int argc, char *argv[]){
             default: {}
             }
         }
-        // gol.render(renderer);    // Not implemented
+        gol.render(renderer);
         SDL_RenderPresent(renderer);
-        // gol.update();    // Not implemented
+        gol.update();
         sleep(1000 / SPEED);
     }
 
