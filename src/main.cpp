@@ -65,16 +65,45 @@ int main(int argc, char *argv[]){
     gol.update();                   /* And update it */
 
     int last_time = 0;
-    const int SPEED = 1;    /* Updates per second */
+    double SPEED = 1;    /* Updates per second */
     bool quit = false;
     SDL_Event e;
 
     while(!quit){
         while(SDL_PollEvent(&e)){
             switch(e.type){
-            case SDL_QUIT:
-                quit = true;
-                break;
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                case SDL_KEYDOWN:
+                    switch(e.key.keysym.sym){
+                        case SDLK_PLUS:              /* This virtual key does not have corresponding physical key, :(   */
+                        case SDLK_EQUALS:            /* When I press `Shift` and `=` keys, it writes `+`                */
+                        case SDLK_KP_PLUS:
+                            if(SPEED < 996)
+                                SPEED += 5;
+                            SDL_Log("%lf", SPEED);
+                            break;
+                        case SDLK_KP_MINUS:
+                        case SDLK_MINUS:
+                            if(SPEED > 5)
+                                SPEED -= 5;
+                            SDL_Log("%lf", SPEED);
+                            break;
+                        case SDLK_ASTERISK:              /* Again, no physical key :(   */
+                        case SDLK_8:                     /* So I'll use the `8` key     */
+                        case SDLK_KP_MULTIPLY:
+                            if(SPEED < 500)
+                                SPEED *= 2;
+                            SDL_Log("%lf", SPEED);
+                            break;
+                        case SDLK_SLASH:
+                        case SDLK_KP_DIVIDE:
+                            if(SPEED > 0.05)
+                                SPEED /= 2;
+                            SDL_Log("%lf", SPEED);
+                            break;
+                    }
             default: {}
             }
         }
