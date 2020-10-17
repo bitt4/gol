@@ -10,14 +10,6 @@
 #include <unistd.h>
 #endif
 
-void sleep(int miliseconds){
-#ifdef _WIN32
-    Sleep(miliseconds);
-#else
-    usleep(miliseconds * 1000);
-#endif
-}
-
 int main(int argc, char *argv[]){
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -68,11 +60,14 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    gol.render(renderer);           /* Render initial state of game */
     SDL_RenderPresent(renderer);
+    gol.update();                   /* And update it */
 
-    SDL_Event e;
+    int last_time = 0;
+    const int SPEED = 1;    /* Updates per second */
     bool quit = false;
-    const int SPEED = 5;    /* Updates per second */
+    SDL_Event e;
 
     while(!quit){
         while(SDL_PollEvent(&e)){
@@ -83,10 +78,14 @@ int main(int argc, char *argv[]){
             default: {}
             }
         }
-        gol.render(renderer);
-        SDL_RenderPresent(renderer);
-        gol.update();
-        sleep(1000 / SPEED);
+
+        int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs more than ~49 days        */
+        if(time_now > last_time + 1000 / SPEED){
+            gol.render(renderer);                   /* Use this instead of sleep(ms), because I want to detect keypresses,  */
+            SDL_RenderPresent(renderer);            /* etc. faster. If sleep() function would be used, event handlers would */
+            gol.update();                           /* be delayed. This basically updates game every `1000 / SPEED` ms,     */
+            last_time = time_now;                   /* but processes events every iteration of the main game loop           */
+        }
     }
 
     SDL_DestroyRenderer(renderer);
