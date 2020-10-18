@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
     gol.update();                   /* And update it */
 
     int last_time = 0;
-    double SPEED = 1;    /* Updates per second */
+    int SPEED = 1;                  /* Updates per second */
     bool quit = false;
     SDL_Event e;
 
@@ -80,35 +80,20 @@ int main(int argc, char *argv[]){
                         case SDLK_PLUS:              /* This virtual key does not have corresponding physical key, :(   */
                         case SDLK_EQUALS:            /* When I press `Shift` and `=` keys, it writes `+`                */
                         case SDLK_KP_PLUS:
-                            if(SPEED < 996)
-                                SPEED += 5;
-                            SDL_Log("%lf", SPEED);
+                            if(SPEED < 1000)         /* upper limit of 1000 updates per second */
+                                SPEED += 1;
                             break;
                         case SDLK_KP_MINUS:
                         case SDLK_MINUS:
-                            if(SPEED > 5)
-                                SPEED -= 5;
-                            SDL_Log("%lf", SPEED);
-                            break;
-                        case SDLK_ASTERISK:              /* Again, no physical key :(   */
-                        case SDLK_8:                     /* So I'll use the `8` key     */
-                        case SDLK_KP_MULTIPLY:
-                            if(SPEED < 500)
-                                SPEED *= 2;
-                            SDL_Log("%lf", SPEED);
-                            break;
-                        case SDLK_SLASH:
-                        case SDLK_KP_DIVIDE:
-                            if(SPEED > 0.05)
-                                SPEED /= 2;
-                            SDL_Log("%lf", SPEED);
+                            if(SPEED > 1)            /* lower limit of 1 update per second */
+                                SPEED -= 1;
                             break;
                     }
             default: {}
             }
         }
 
-        int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs more than ~49 days        */
+        int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs for more than ~49 days    */
         if(time_now > last_time + 1000 / SPEED){
             gol.render(renderer);                   /* Use this instead of sleep(ms), because I want to detect keypresses,  */
             SDL_RenderPresent(renderer);            /* etc. faster. If sleep() function would be used, event handlers would */
