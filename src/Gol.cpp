@@ -9,7 +9,7 @@ Gol::Gol(int width, int height, int cell_width, bool* initial_state)
 {
     int size_of_grid = width * height;
 
-    this->first_grid = (bool*)calloc(size_of_grid, sizeof(bool));
+    this->first_grid = (bool*)calloc(size_of_grid, sizeof(bool));     /* allocate memory for 2 grids */
     this->second_grid = (bool*)calloc(size_of_grid, sizeof(bool));
 
     memcpy(first_grid, initial_state, size_of_grid);
@@ -29,8 +29,8 @@ int Gol::get_nearby_cells(int x, int y){
     int nearby_cells = 0;
 
     for(int ry = -1; ry < 2; ry++){
-        for(int rx = -1; rx < 2; rx++){
-            if(!(rx == 0 && ry == 0)){
+        for(int rx = -1; rx < 2; rx++){        /* Use modulo to ensure that negative coordinates will warp over, e.g. y coord */
+            if(!(rx == 0 && ry == 0)){         /* with value -2 will wrap over to -2 + height of grid (e.g. 4 for height = 6) */
                 if(this->second_grid[ mod(y + ry, this->height) * this->height + mod(x + rx, this->width) ])
                     nearby_cells++;
             }
@@ -67,10 +67,10 @@ void Gol::update(){
                 this->first_grid[current_cell_coords] = true;    /* it will live on to next generation */
             }
 
-            else if(!this->second_grid[current_cell_coords]           /* If the current cell is dead */
-               && nearby_cells == 3)                             /* and it has exactly 3 living neighbour cells */
+            else if(!this->second_grid[current_cell_coords]      /* If the current cell is dead */
+                    && nearby_cells == 3)                        /* and it has exactly 3 living neighbour cells */
             {
-                this->first_grid[current_cell_coords] = true;    /* it will become living cell */
+                this->first_grid[current_cell_coords] = true;    /* it will become a living cell */
             }
 
             else {
@@ -83,11 +83,11 @@ void Gol::update(){
 void Gol::render(SDL_Renderer* renderer){
     for(int y = 0; y < this->height; y++){
         for(int x = 0; x < this->width; x++){
-            if(this->first_grid[y * this->height + x]){
-                draw_cell(renderer, x, y, this->cell_color);
+            if(this->first_grid[y * this->height + x]){               /* if the cell is alive          */
+                draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
             }
             else {
-                draw_cell(renderer, x, y, this->background_color);
+                draw_cell(renderer, x, y, this->background_color);    /* otherwise draw the background */
             }
         }
     }
