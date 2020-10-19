@@ -1,6 +1,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
+#include <random>
 
 #include "Gol.hpp"
 
@@ -36,6 +38,19 @@ int main(int argc, char *argv[]){
     int width = 17;
     int height = 17;
     int cell_size = 50;
+
+    bool randomize_grid = true;    /* This flag will be enabled by command-line arguments */
+
+    /* TODO: return seed of pseudo-rng if certain flag is set */
+
+    if(randomize_grid){
+        srand(time(NULL));
+        for(int y = 0; y < height; y++){
+            for(int x = 0; x < width; x++){
+                initial_state[ y * height + x ] = (rand()%2 == 0);
+            }
+        }
+    }
 
     Gol gol(width, height, cell_size, initial_state);
 
