@@ -147,12 +147,12 @@ int main(int argc, char *argv[]){
             }
         }
 
-        int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs for more than ~49 days    */
+        int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs for more than ~49 days      */
         if(SPEED != 0 && time_now > last_time + 1000 / SPEED){
-            gol.render(renderer);                   /* Use this instead of sleep(ms), because I want to detect keypresses,  */
-            SDL_RenderPresent(renderer);            /* etc. faster. If sleep() function would be used, event handlers would */
-            gol.update();                           /* be delayed. This basically updates game every `1000 / SPEED` ms,     */
-            last_time = time_now;                   /* but processes events every iteration of the main game loop           */
+            gol.render(renderer);                   /* Use this instead of sleep(ms), because I want to detect keypresses and */
+            SDL_RenderPresent(renderer);            /* events faster. If sleep() function would be used, event handlers would */
+            gol.update();                           /* be delayed. This basically updates game every `1000 / SPEED` ms, but   */
+            last_time = time_now;                   /* processes events every iteration of the main game loop                 */
         }
     }
 
