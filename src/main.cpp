@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <random>
+#include <getopt.h>
 
 #include "Gol.hpp"
 
@@ -35,11 +36,46 @@ int main(int argc, char *argv[]){
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
 
+    /* Default options */
+    bool randomize_grid = false;
     int width = 17;
     int height = 17;
     int cell_size = 50;
 
-    bool randomize_grid = true;    /* This flag will be enabled by command-line arguments */
+
+    static struct option long_options[] = {
+                                           {"random", no_argument, NULL, 'r'},
+                                           {"width", required_argument, NULL, 'w'},
+                                           {"height", required_argument, NULL, 'h'},
+                                           {"help", no_argument, NULL, '?'},
+                                           {NULL, 0, NULL, 0}
+    };
+
+    int c;
+
+    /* Parse command-line arguments, NOT YET COMPLETE */
+    while ((c = getopt_long(argc, argv, "rw:h:?", long_options, NULL)) != -1) {
+        switch (c)
+            {
+            case 'r':
+                randomize_grid = true;
+                break;
+            case 'w':
+                width = atoi(optarg);
+                break;
+            case 'h':
+                height = atoi(optarg);
+                break;
+            case '?':
+                /* display help, not fully implemented yet */
+                fprintf(stderr,
+                        "%s: Use -h or --help to display options.\n", argv[0]);
+                exit(EXIT_FAILURE);
+            default: {}
+            }
+    }
+
+    /* TODO: check for errors in arguments, i.e. negative width or height values, etc. */
 
     /* TODO: return seed of pseudo-rng if certain flag is set */
 
