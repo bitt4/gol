@@ -77,6 +77,8 @@ int main(int argc, char *argv[]){
 
     /* TODO: check for errors in arguments, i.e. negative width or height values, etc. */
 
+    /* TODO: randomizing grid with different width and height doesn't work as expected */
+
     /* TODO: return seed of pseudo-rng if certain flag is set */
 
     if(randomize_grid){
