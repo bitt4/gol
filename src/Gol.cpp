@@ -31,7 +31,7 @@ int Gol::get_nearby_cells(int x, int y){
     for(int ry = -1; ry < 2; ry++){
         for(int rx = -1; rx < 2; rx++){        /* Use modulo to ensure that negative coordinates will warp over, e.g. y coord */
             if(!(rx == 0 && ry == 0)){         /* with value -2 will wrap over to -2 + height of grid (e.g. 4 for height = 6) */
-                if(this->second_grid[ mod(y + ry, this->height) * this->height + mod(x + rx, this->width) ])
+                if(this->second_grid[ mod(y + ry, this->height) * this->width + mod(x + rx, this->width) ])
                     nearby_cells++;
             }
         }
@@ -58,7 +58,7 @@ void Gol::update(){
     for(int y = 0; y < this->height; y++){
         for(int x = 0; x < this->width; x++){
             int nearby_cells = get_nearby_cells(x, y);
-            int current_cell_coords = y * this->height + x;
+            int current_cell_coords = y * this->width + x;
 
             if(this->second_grid[current_cell_coords]            /* If the current cell is alive */
                && nearby_cells >= 2                              /* and if it has 2 or 3 living neighbour cells */
@@ -83,7 +83,7 @@ void Gol::update(){
 void Gol::render(SDL_Renderer* renderer){
     for(int y = 0; y < this->height; y++){
         for(int x = 0; x < this->width; x++){
-            if(this->first_grid[y * this->height + x]){               /* if the cell is alive          */
+            if(this->first_grid[y * this->width + x]){                /* if the cell is alive          */
                 draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
             }
             else {
