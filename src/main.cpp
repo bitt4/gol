@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <random>
 #include <getopt.h>
 
 #include "Gol.hpp"
@@ -17,7 +16,7 @@ int main(int argc, char *argv[]){
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    bool initial_state[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    bool initial_state[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    /* pulsar */
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                             0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -38,6 +37,8 @@ int main(int argc, char *argv[]){
 
     /* Default options */
     bool randomize_grid = false;
+    bool return_seed = false;
+    time_t seed = 0;
     int width = 17;
     int height = 17;
     int cell_size = 50;
@@ -47,6 +48,7 @@ int main(int argc, char *argv[]){
                                            {"random", no_argument, NULL, 'r'},
                                            {"width", required_argument, NULL, 'w'},
                                            {"height", required_argument, NULL, 'h'},
+                                           {"seed", no_argument, NULL, 's'},
                                            {"help", no_argument, NULL, '?'},
                                            {NULL, 0, NULL, 0}
     };
@@ -54,7 +56,7 @@ int main(int argc, char *argv[]){
     int c;
 
     /* Parse command-line arguments, NOT YET COMPLETE */
-    while ((c = getopt_long(argc, argv, "rw:h:?", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "rw:h:s?", long_options, NULL)) != -1) {
         switch (c)
             {
             case 'r':
@@ -66,6 +68,9 @@ int main(int argc, char *argv[]){
             case 'h':
                 height = atoi(optarg);
                 break;
+            case 's':
+                return_seed = true;
+                break;
             case '?':
                 /* display help, not fully implemented yet */
                 fprintf(stderr,
@@ -75,20 +80,24 @@ int main(int argc, char *argv[]){
             }
     }
 
-    /* TODO: check for errors in arguments, i.e. negative width or height values, etc. */
+    /* TODO: Check for errors in arguments, i.e. negative width or height values, etc.
+     */
 
-    /* TODO: randomizing grid with different width and height doesn't work as expected */
-
-    /* TODO: return seed of pseudo-rng if certain flag is set */
+    /* TODO: Randomizing grid with different width and height doesn't work as expected
+     */
 
     if(randomize_grid){
-        srand(time(NULL));
+        seed = time(NULL);
+        srand(seed);
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
-                initial_state[ y * height + x ] = (rand()%2 == 0);
+                initial_state[ y * height + x ] = rand()%2;
             }
         }
     }
+
+    if(return_seed)
+        fprintf(stdout, "Seed: %ld\n", seed);
 
     Gol gol(width, height, cell_size, initial_state);
 
