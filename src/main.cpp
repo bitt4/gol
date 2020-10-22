@@ -84,10 +84,7 @@ int main(int argc, char *argv[]){
     /* TODO: Check for errors in arguments, i.e. negative width or height values, etc.
      */
 
-    /* TODO: Randomizing grid with different width and height doesn't work as expected
-     */
-
-    /* TODO: allocate memory for `initial_state` after getting width and height from command-line args
+    /* TODO: Allocate memory for `initial_state` after getting width and height from command-line args
      */
 
     if(randomize_grid){
