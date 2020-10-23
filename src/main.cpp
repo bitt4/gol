@@ -6,12 +6,6 @@
 
 #include "Gol.hpp"
 
-#ifdef _WIN32
-#include <Windows.h>
-#else
-#include <unistd.h>
-#endif
-
 int main(int argc, char *argv[]){
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -50,6 +44,7 @@ int main(int argc, char *argv[]){
                                            {"width", required_argument, NULL, 'w'},
                                            {"height", required_argument, NULL, 'h'},
                                            {"seed", no_argument, NULL, 's'},
+                                           {"cs", required_argument, NULL, 'c'},
                                            {"help", no_argument, NULL, '?'},
                                            {NULL, 0, NULL, 0}
     };
@@ -57,7 +52,7 @@ int main(int argc, char *argv[]){
     int c;
 
     /* Parse command-line arguments, NOT YET COMPLETE */
-    while ((c = getopt_long(argc, argv, "rw:h:s?", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "rw:h:sc:?", long_options, NULL)) != -1) {
         switch (c)
             {
             case 'r':
@@ -71,6 +66,9 @@ int main(int argc, char *argv[]){
                 break;
             case 's':
                 return_seed = true;
+                break;
+            case 'c':
+                cell_size = atoi(optarg);
                 break;
             case '?':
                 /* display help, not fully implemented yet */
