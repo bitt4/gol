@@ -86,9 +86,6 @@ int main(int argc, char *argv[]){
     /* TODO: Check for minimal width and height of the window
      */
 
-    /* TODO: Allocate memory for `initial_state` after getting width and height from command-line args
-     */
-
     int grid_size = width * height;
     bool *initial_state = (bool*)calloc(grid_size, sizeof(bool));
 
