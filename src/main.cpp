@@ -13,9 +13,8 @@ int main(int argc, char *argv[]){
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    /* Reserve 400 bytes for now, but if the `width * height` will be */
-    /* bigger that 400, it'll corrupt the stack                       */
-    bool initial_state[400] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    /* pulsar */
+    /*
+    bool initial_state[400] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,    pulsar
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0,
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -33,6 +32,7 @@ int main(int argc, char *argv[]){
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     };
+    */
 
     /* Default options */
     bool randomize_grid = false;
@@ -82,17 +82,26 @@ int main(int argc, char *argv[]){
             }
     }
 
-    /* TODO: Check for minimal width and height of the window */
+    /* TODO: Check for minimal width and height of the window
+     */
 
     /* TODO: Allocate memory for `initial_state` after getting width and height from command-line args
      */
+
+    int grid_size = width * height;
+    bool *initial_state = (bool*)calloc(grid_size, sizeof(bool));
 
     if(randomize_grid){
         seed = time(NULL);
         srand(seed);
 
-        for(int i = 0; i < width * height; i++){
+        for(int i = 0; i < grid_size; i++){
             initial_state[i] = rand()%2;
+        }
+    }
+    else {    /* For now make every other cell alive */
+        for(int i = 0; i < grid_size; i++){
+            initial_state[i] = i%2;
         }
     }
 
