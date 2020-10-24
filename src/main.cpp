@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
+#include <random>
 #include <getopt.h>
 
 #include "Gol.hpp"
@@ -93,10 +94,10 @@ int main(int argc, char *argv[]){
 
     if(randomize_grid){
         seed = time(NULL);
-        srand(seed);
+        std::mt19937 generator(seed);
 
         for(int i = 0; i < grid_size; i++){
-            initial_state[i] = rand()%2;
+            initial_state[i] = generator()%2;
         }
     }
     else {    /* For now make every other cell alive */
