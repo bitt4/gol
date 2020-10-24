@@ -82,7 +82,7 @@ int main(int argc, char *argv[]){
             }
     }
 
-    /* Check for minimal width and height of the window */
+    /* TODO: Check for minimal width and height of the window */
 
     /* TODO: Allocate memory for `initial_state` after getting width and height from command-line args
      */
