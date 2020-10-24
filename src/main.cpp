@@ -174,6 +174,8 @@ int main(int argc, char *argv[]){
         }
     }
 
+    free(initial_state);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
