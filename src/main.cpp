@@ -2,9 +2,12 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
 #include <getopt.h>
 
 #include "Gol.hpp"
+
+int parse_option(const char* arg, int max_length);
 
 int main(int argc, char *argv[]){
 
@@ -59,16 +62,16 @@ int main(int argc, char *argv[]){
                 randomize_grid = true;
                 break;
             case 'w':
-                width = atoi(optarg);
+                width = parse_option(optarg, 4);
                 break;
             case 'h':
-                height = atoi(optarg);
+                height = parse_option(optarg, 4);
                 break;
             case 's':
                 return_seed = true;
                 break;
             case 'c':
-                cell_size = atoi(optarg);
+                cell_size = parse_option(optarg, 3);
                 break;
             case '?':
                 /* display help, not fully implemented yet */
@@ -79,8 +82,7 @@ int main(int argc, char *argv[]){
             }
     }
 
-    /* TODO: Check for errors in arguments, i.e. negative width or height values, etc.
-     */
+    /* Check for minimal width and height of the window */
 
     /* TODO: Allocate memory for `initial_state` after getting width and height from command-line args
      */
@@ -89,10 +91,8 @@ int main(int argc, char *argv[]){
         seed = time(NULL);
         srand(seed);
 
-        for(int y = 0; y < height; y++){
-            for(int x = 0; x < width; x++){
-                initial_state[ y * width + x ] = rand()%2;
-            }
+        for(int i = 0; i < width * height; i++){
+            initial_state[i] = rand()%2;
         }
     }
 
@@ -171,4 +171,22 @@ int main(int argc, char *argv[]){
     SDL_DestroyWindow(window);
     SDL_Quit();
     return 0;
+}
+
+int parse_option(const char* arg, int max_length){
+    int value = atoi(arg);    /* I used atoi, because it returns 0 when the text is not a number, and I can easily check that */
+
+    if(value <= 0){           /* I don't think I want to allow negative values in any of the command-line arguments           */
+        fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
+        exit(1);
+    }
+
+    int length = (int)log10(value) + 1;    /* calculate the length of a number */
+
+    if(length > max_length){
+        fprintf(stderr, "Invalid argument: %s is too big\n", arg);
+        exit(1);
+    }
+
+    return value;
 }
