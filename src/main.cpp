@@ -120,6 +120,11 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    /* Set window icon */           /* I think we don't need a function for getting full path since it's used only once */
+    SDL_Surface *icon = SDL_LoadBMP((std::string(SDL_GetBasePath()) + "assets/icon.bmp").c_str());
+    SDL_SetWindowIcon(window, icon);
+    SDL_FreeSurface(icon);
+
     SDL_Renderer *renderer = SDL_CreateRenderer(window,
                                                 -1,
                                                 SDL_RENDERER_SOFTWARE);
