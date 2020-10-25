@@ -8,7 +8,7 @@
 
 #include "Gol.hpp"
 
-int parse_option(const char* arg, int max_length);
+int parse_option(const char* arg, int max_length, bool allow_zero = false);
 
 int main(int argc, char *argv[]){
 
@@ -42,6 +42,7 @@ int main(int argc, char *argv[]){
     int width = 17;
     int height = 17;
     int cell_size = 50;
+    int SPEED = 1;                  /* Updates per second */
 
     static struct option long_options[] = {
                                            {"random", no_argument, NULL, 'r'},
@@ -49,6 +50,7 @@ int main(int argc, char *argv[]){
                                            {"height", required_argument, NULL, 'h'},
                                            {"seed", optional_argument, NULL, 's'},
                                            {"cell-size", required_argument, NULL, 'c'},
+                                           {"speed", required_argument, NULL, 'v'},         /* v as in velocity */
                                            {"help", no_argument, NULL, '?'},
                                            {NULL, 0, NULL, 0}
     };
@@ -70,12 +72,15 @@ int main(int argc, char *argv[]){
                 break;
             case 's':
                 if(optarg)
-                    seed = parse_option(optarg, 16);    /*  */
+                    seed = parse_option(optarg, 16);
                 else
                     return_seed = true;
                 break;
             case 'c':
                 cell_size = parse_option(optarg, 3);
+                break;
+            case 'v':
+                SPEED = parse_option(optarg, 4, true);
                 break;
             case '?':
                 /* display help, not fully implemented yet */
@@ -144,7 +149,6 @@ int main(int argc, char *argv[]){
     gol.update();                   /* And update it */
 
     int last_time = 0;
-    int SPEED = 1;                  /* Updates per second */
     bool quit = false;
     SDL_Event e;
 
@@ -192,15 +196,27 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-int parse_option(const char* arg, int max_length){
+int parse_option(const char* arg, int max_length, bool allow_zero){
     int value = atoi(arg);    /* I used atoi, because it returns 0 when the text is not a number, and I can easily check that */
-
-    if(value <= 0){           /* I don't think I want to allow negative values in any of the command-line arguments           */
-        fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
-        exit(1);
+                              /* When allow_zero is set to true, `value` will be 0 if parsed argument is a text               */
+    if(allow_zero){
+        if(value < 0){
+            fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
+            exit(1);
+        }
+    }
+    else {
+        if(value <= 0){       /* I don't think I want to allow negative values in any of the command-line arguments           */
+            fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
+            exit(1);
+        }
     }
 
-    int length = (int)log10(value) + 1;    /* calculate the length of a number */
+    int length;
+    if(value == 0)
+        length = 1;
+    else
+        length = (int)log10(value) + 1;    /* calculate the length of a number */
 
     if(length > max_length){
         fprintf(stderr, "Invalid argument: %s is too big\n", arg);
