@@ -47,8 +47,8 @@ int main(int argc, char *argv[]){
                                            {"random", no_argument, NULL, 'r'},
                                            {"width", required_argument, NULL, 'w'},
                                            {"height", required_argument, NULL, 'h'},
-                                           {"seed", no_argument, NULL, 's'},
-                                           {"cs", required_argument, NULL, 'c'},
+                                           {"seed", optional_argument, NULL, 's'},
+                                           {"cell-size", required_argument, NULL, 'c'},
                                            {"help", no_argument, NULL, '?'},
                                            {NULL, 0, NULL, 0}
     };
@@ -69,7 +69,10 @@ int main(int argc, char *argv[]){
                 height = parse_option(optarg, 4);
                 break;
             case 's':
-                return_seed = true;
+                if(optarg)
+                    seed = parse_option(optarg, 16);    /*  */
+                else
+                    return_seed = true;
                 break;
             case 'c':
                 cell_size = parse_option(optarg, 3);
@@ -90,7 +93,9 @@ int main(int argc, char *argv[]){
     bool *initial_state = (bool*)calloc(grid_size, sizeof(bool));
 
     if(randomize_grid){
-        seed = time(NULL);
+        if(seed == 0)
+            seed = time(NULL);
+
         std::mt19937 generator(seed);
 
         for(int i = 0; i < grid_size; i++){
