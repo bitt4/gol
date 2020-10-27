@@ -6,8 +6,8 @@ class Gol {
 private:
     int width, height;
     int cell_width;
-    bool* first_grid;
-    bool* second_grid;
+    bool* rendered_grid;
+    bool* comparison_grid;
 
     SDL_Color cell_color, background_color;
 

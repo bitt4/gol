@@ -9,15 +9,15 @@ Gol::Gol(int width, int height, int cell_width, bool* initial_state)
 {
     int size_of_grid = width * height;
 
-    this->first_grid = (bool*)calloc(size_of_grid, sizeof(bool));     /* allocate memory for 2 grids */
-    this->second_grid = (bool*)calloc(size_of_grid, sizeof(bool));
+    this->rendered_grid = (bool*)calloc(size_of_grid, sizeof(bool));     /* allocate memory for 2 grids */
+    this->comparison_grid = (bool*)calloc(size_of_grid, sizeof(bool));
 
-    memcpy(first_grid, initial_state, size_of_grid);
+    memcpy(rendered_grid, initial_state, size_of_grid);
 }
 
 Gol::~Gol(){
-    free(this->first_grid);
-    free(this->second_grid);
+    free(this->rendered_grid);
+    free(this->comparison_grid);
 }
 
 inline int mod(int a, int b){
@@ -31,7 +31,7 @@ int Gol::get_nearby_cells(int x, int y){
     for(int ry = -1; ry < 2; ry++){
         for(int rx = -1; rx < 2; rx++){        /* Use modulo to ensure that negative coordinates will warp over, e.g. y coord */
             if(!(rx == 0 && ry == 0)){         /* with value -2 will wrap over to -2 + height of grid (e.g. 4 for height = 6) */
-                if(this->second_grid[ mod(y + ry, this->height) * this->width + mod(x + rx, this->width) ])
+                if(this->comparison_grid[ mod(y + ry, this->height) * this->width + mod(x + rx, this->width) ])
                     nearby_cells++;
             }
         }
@@ -53,28 +53,28 @@ void Gol::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color){
 
 void Gol::update(){
     int size_of_grid = this->width * this->height;
-    memcpy(second_grid, first_grid, size_of_grid);
+    memcpy(comparison_grid, rendered_grid, size_of_grid);
 
     for(int y = 0; y < this->height; y++){
         for(int x = 0; x < this->width; x++){
             int nearby_cells = get_nearby_cells(x, y);
             int current_cell_coords = y * this->width + x;
 
-            if(this->second_grid[current_cell_coords]            /* If the current cell is alive */
+            if(this->comparison_grid[current_cell_coords]            /* If the current cell is alive */
                && nearby_cells >= 2                              /* and if it has 2 or 3 living neighbour cells */
                && nearby_cells <= 3)
             {
-                this->first_grid[current_cell_coords] = true;    /* it will live on to next generation */
+                this->rendered_grid[current_cell_coords] = true;    /* it will live on to next generation */
             }
 
-            else if(!this->second_grid[current_cell_coords]      /* If the current cell is dead */
+            else if(!this->comparison_grid[current_cell_coords]      /* If the current cell is dead */
                     && nearby_cells == 3)                        /* and it has exactly 3 living neighbour cells */
             {
-                this->first_grid[current_cell_coords] = true;    /* it will become a living cell */
+                this->rendered_grid[current_cell_coords] = true;    /* it will become a living cell */
             }
 
             else {
-                this->first_grid[current_cell_coords] = false;   /* Any other cell dies */
+                this->rendered_grid[current_cell_coords] = false;   /* Any other cell dies */
             }
         }
     }
@@ -83,7 +83,7 @@ void Gol::update(){
 void Gol::render(SDL_Renderer* renderer){
     for(int y = 0; y < this->height; y++){
         for(int x = 0; x < this->width; x++){
-            if(this->first_grid[y * this->width + x]){                /* if the cell is alive          */
+            if(this->rendered_grid[y * this->width + x]){                /* if the cell is alive          */
                 draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
             }
             else {
