@@ -196,6 +196,9 @@ int main(int argc, char *argv[]){
 int parse_option(const char* arg, int max_length, bool allow_zero){
     int value = atoi(arg);    /* I used atoi, because it returns 0 when the text is not a number, and I can easily check that */
                               /* When allow_zero is set to true, `value` will be 0 if parsed argument is a text               */
+
+    /* TODO: atoi fails when converting values bigger than 32bit i suppose */
+
     if(allow_zero){
         if(value < 0){
             fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
