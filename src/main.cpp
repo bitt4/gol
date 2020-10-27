@@ -91,9 +91,6 @@ int main(int argc, char *argv[]){
             }
     }
 
-    /* TODO: Check for minimal width and height of the window
-     */
-
     int grid_size = width * height;
     bool *initial_state = (bool*)calloc(grid_size, sizeof(bool));
 
