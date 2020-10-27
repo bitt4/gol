@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Seed files (they store seeds for rng)
+*.seed
