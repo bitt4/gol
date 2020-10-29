@@ -1,6 +1,6 @@
 #include "Gol.hpp"
 
-Gol::Gol(int width, int height, int cell_width, bool* initial_state)
+GameOfLife::GameOfLife(int width, int height, int cell_width, bool* initial_state)
     :width(width),
      height(height),
      cell_width(cell_width),
@@ -15,7 +15,7 @@ Gol::Gol(int width, int height, int cell_width, bool* initial_state)
     memcpy(rendered_grid, initial_state, size_of_grid);
 }
 
-Gol::~Gol(){
+GameOfLife::~GameOfLife(){
     free(this->rendered_grid);
     free(this->comparison_grid);
 }
@@ -25,7 +25,7 @@ inline int mod(int a, int b){
     return res >= 0 ? res : res + b;
 }
 
-int Gol::get_nearby_cells(int x, int y){
+int GameOfLife::get_nearby_cells(int x, int y){
     int nearby_cells = 0;
 
     for(int ry = -1; ry < 2; ry++){
@@ -40,7 +40,7 @@ int Gol::get_nearby_cells(int x, int y){
     return nearby_cells;
 }
 
-void Gol::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color){
+void GameOfLife::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color){
     SDL_Rect cell_rectangle;
     cell_rectangle.x = x * this->cell_width;
     cell_rectangle.y = y * this->cell_width;
@@ -51,7 +51,7 @@ void Gol::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color){
     SDL_RenderFillRect(renderer, &cell_rectangle);
 }
 
-void Gol::update(){
+void GameOfLife::update(){
     int size_of_grid = this->width * this->height;
     memcpy(comparison_grid, rendered_grid, size_of_grid);
 
@@ -61,29 +61,29 @@ void Gol::update(){
             int current_cell_coords = y * this->width + x;
 
             if(this->comparison_grid[current_cell_coords]            /* If the current cell is alive */
-               && nearby_cells >= 2                              /* and if it has 2 or 3 living neighbour cells */
+               && nearby_cells >= 2                                  /* and if it has 2 or 3 living neighbour cells */
                && nearby_cells <= 3)
             {
-                this->rendered_grid[current_cell_coords] = true;    /* it will live on to next generation */
+                this->rendered_grid[current_cell_coords] = true;     /* it will live on to next generation */
             }
 
             else if(!this->comparison_grid[current_cell_coords]      /* If the current cell is dead */
-                    && nearby_cells == 3)                        /* and it has exactly 3 living neighbour cells */
+                    && nearby_cells == 3)                            /* and it has exactly 3 living neighbour cells */
             {
-                this->rendered_grid[current_cell_coords] = true;    /* it will become a living cell */
+                this->rendered_grid[current_cell_coords] = true;     /* it will become a living cell */
             }
 
             else {
-                this->rendered_grid[current_cell_coords] = false;   /* Any other cell dies */
+                this->rendered_grid[current_cell_coords] = false;    /* Any other cell dies */
             }
         }
     }
 }
 
-void Gol::render(SDL_Renderer* renderer){
+void GameOfLife::render(SDL_Renderer* renderer){
     for(int y = 0; y < this->height; y++){
         for(int x = 0; x < this->width; x++){
-            if(this->rendered_grid[y * this->width + x]){                /* if the cell is alive          */
+            if(this->rendered_grid[y * this->width + x]){             /* if the cell is alive          */
                 draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
             }
             else {
