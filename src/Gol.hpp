@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 
-class Gol {
+class GameOfLife {
 private:
     int width, height;
     int cell_width;
@@ -14,8 +14,8 @@ private:
     int get_nearby_cells(int x, int y);
     void draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color);
 public:
-    Gol(int width, int height, int cell_width, bool* initial_state);
-    ~Gol();
+    GameOfLife(int width, int height, int cell_width, bool* initial_state);
+    ~GameOfLife();
     void update();
     void render(SDL_Renderer* renderer);
 };

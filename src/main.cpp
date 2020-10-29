@@ -8,7 +8,7 @@
 
 #include "Gol.hpp"
 
-int parse_option(const char* arg, int max_length, bool allow_zero = false);
+int parse_option_as_number(const char* arg, int max_length, bool allow_zero = false);
 
 int main(int argc, char *argv[]){
 
@@ -65,22 +65,24 @@ int main(int argc, char *argv[]){
                 randomize_grid = true;
                 break;
             case 'w':
-                width = parse_option(optarg, 4);
+                width = parse_option_as_number(optarg, 4);
                 break;
             case 'h':
-                height = parse_option(optarg, 4);
+                height = parse_option_as_number(optarg, 4);
                 break;
             case 's':
-                if(optarg)
-                    seed = parse_option(optarg, 16);
+                if(optarg){
+                    seed = parse_option_as_number(optarg, 16);
+                    randomize_grid = true;                        /* randomize the grid, since the seed for prng was provided */
+                }
                 else
                     return_seed = true;
                 break;
             case 'c':
-                cell_size = parse_option(optarg, 3);
+                cell_size = parse_option_as_number(optarg, 3);
                 break;
             case 'v':
-                SPEED = parse_option(optarg, 4, true);
+                SPEED = parse_option_as_number(optarg, 4, true);
                 break;
             case '?':
                 /* display help, not fully implemented yet */
@@ -113,7 +115,7 @@ int main(int argc, char *argv[]){
     if(return_seed)
         fprintf(stdout, "Seed: %ld\n", seed);
 
-    Gol gol(width, height, cell_size, initial_state);
+    GameOfLife gol(width, height, cell_size, initial_state);
 
     SDL_Window *window = SDL_CreateWindow("Game of Life",
                                           SDL_WINDOWPOS_UNDEFINED,
@@ -193,9 +195,9 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-int parse_option(const char* arg, int max_length, bool allow_zero){
+int parse_option_as_number(const char* arg, int max_length, bool allow_zero){
     int value = atoi(arg);    /* I used atoi, because it returns 0 when the text is not a number, and I can easily check that */
-                              /* When allow_zero is set to true, `value` will be 0 if parsed argument is a text               */
+                              /* When `allow_zero` is set to true, `value` will be 0 if parsed argument is a text             */
 
     /* TODO: atoi fails when converting values bigger than 32bit i suppose, change to strtoul(), maybe use templates          */
 
