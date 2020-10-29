@@ -8,7 +8,7 @@
 
 #include "Gol.hpp"
 
-int parse_option_as_number(const char* arg, int max_length, bool allow_zero = false);
+long int parse_option_as_number(const char* arg, int max_length, bool allow_zero = false);
 
 int main(int argc, char *argv[]){
 
@@ -65,24 +65,24 @@ int main(int argc, char *argv[]){
                 randomize_grid = true;
                 break;
             case 'w':
-                width = parse_option_as_number(optarg, 4);
+                width = parse_option_as_number(optarg, 4);        /* implicit cast from long to int */
                 break;
             case 'h':
-                height = parse_option_as_number(optarg, 4);
+                height = parse_option_as_number(optarg, 4);       /* implicit cast from long to int */
                 break;
             case 's':
                 if(optarg){
-                    seed = parse_option_as_number(optarg, 16);
+                    seed = (unsigned)parse_option_as_number(optarg, 20);
                     randomize_grid = true;                        /* randomize the grid, since the seed for prng was provided */
                 }
                 else
                     return_seed = true;
                 break;
             case 'c':
-                cell_size = parse_option_as_number(optarg, 3);
+                cell_size = parse_option_as_number(optarg, 3);    /* implicit cast from long to int */
                 break;
             case 'v':
-                SPEED = parse_option_as_number(optarg, 4, true);
+                SPEED = parse_option_as_number(optarg, 4, true);  /* implicit cast from long to int */
                 break;
             case '?':
                 /* display help, not fully implemented yet */
@@ -195,23 +195,20 @@ int main(int argc, char *argv[]){
     return 0;
 }
 
-int parse_option_as_number(const char* arg, int max_length, bool allow_zero){
-    int value = atoi(arg);    /* I used atoi, because it returns 0 when the text is not a number, and I can easily check that */
-                              /* When `allow_zero` is set to true, `value` will be 0 if parsed argument is a text             */
-
-    /* TODO: atoi fails when converting values bigger than 32bit i suppose, change to strtoul(), maybe use templates          */
+long int parse_option_as_number(const char* arg, int max_length, bool allow_zero){
+    char *endptr; /* Used by strtol */
+    long int value = strtol(arg, &endptr, 10);
+    /* When `allow_zero` is set to true, `value` will be 0 if parsed argument is not a valid number */
 
     if(allow_zero){
         if(value < 0){
-            fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
+            fprintf(stderr, "Invalid argument: %s is too small.\n", arg);
             exit(1);
         }
     }
-    else {
-        if(value <= 0){       /* I don't think I want to allow negative values in any of the command-line arguments           */
-            fprintf(stderr, "Invalid argument: %s is either not a number or is too small\n", arg);
-            exit(1);
-        }
+    else if(value <= 0){       /* I don't think I want to allow negative values in any of the command-line arguments           */
+        fprintf(stderr, "Invalid argument: %s is too small.\n", arg);
+        exit(1);
     }
 
     int length;
