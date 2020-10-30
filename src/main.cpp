@@ -58,7 +58,7 @@ int main(int argc, char *argv[]){
     int c;
 
     /* Parse command-line arguments, NOT YET COMPLETE */
-    while ((c = getopt_long(argc, argv, "rw:h:sc:?", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "rw:h:sc:v:?", long_options, NULL)) != -1) {
         switch (c)
             {
             case 'r':
