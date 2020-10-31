@@ -271,7 +271,7 @@ void load_file(const char* filename, bool *&destination_grid){
 
             while(grid_file.get(c)){
                 bool cell;
-                if(c == '\n' && grid_file.peek() != std::ifstream::traits_type::eof()){
+                if(c == '\n'){
                     grid_y++;
                     current_line_length = 0;
                 }
