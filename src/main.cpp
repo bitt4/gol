@@ -270,22 +270,21 @@ void load_file(const char* filename, bool *&destination_grid){
             current_line_length = 0;
 
             while(grid_file.get(c)){
+                bool cell;
                 if(c == '\n' && grid_file.peek() != std::ifstream::traits_type::eof()){
                     grid_y++;
                     current_line_length = 0;
                 }
                 else {
-                    current_line_length++;
                     if(c == '0' || c == ' '){
                         cell = false;
                     }
                     else {
                         cell = true;
+                    }
+                    destination_grid[grid_y * grid_width + current_line_length] = cell;
+                    current_line_length++;
                 }
-                destination_grid[grid_y * grid_width + current_line_length - 1] = cell;
-                }
-                bool cell;
-                
             }
         }
     }
