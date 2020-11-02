@@ -42,7 +42,7 @@ void fill_grid(std::ifstream &file_stream, bool *&destination_grid, int grid_wid
     }
 }
 
-void load_file(const char* filename, bool *&destination_grid){
+void load_file(const char* filename, bool *&destination_grid, int &grid_height_dest, int &grid_width_dest){
     /* For now handles simple files */
     std::ifstream grid_file(filename);
 
@@ -73,5 +73,7 @@ void load_file(const char* filename, bool *&destination_grid){
         exit(1);
     }
 
+    grid_width_dest = grid_width;
+    grid_height_dest = grid_height;
     grid_file.close();
 }
