@@ -18,7 +18,7 @@ void get_grid_dimensions_from_file_stream(std::ifstream &file_stream, int &grid_
     grid_width_dest = max_line_width;
 }
 
-void fill_grid(std::ifstream &file_stream, bool *&destination_grid, int grid_width){
+void fill_grid(std::ifstream &file_stream, bool *&destination_grid, const int grid_width){
     int grid_y = 0;
     int current_line_length = 0;
 
@@ -42,7 +42,7 @@ void fill_grid(std::ifstream &file_stream, bool *&destination_grid, int grid_wid
     }
 }
 
-void load_file(const char* filename, bool *&destination_grid, int &grid_height_dest, int &grid_width_dest){
+void load_file(const char* filename, bool *&destination_grid, int &grid_width_dest, int &grid_height_dest){
     /* For now handles simple files */
     std::ifstream grid_file(filename);
 
