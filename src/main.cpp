@@ -43,6 +43,8 @@ int main(int argc, char *argv[]){
     /* Default options */
     bool randomize_grid = false;
     bool return_seed = false;
+    bool file_specified = false;
+    std::string filename;
     time_t seed = 0;
     int width = 17;
     int height = 17;
@@ -98,27 +100,38 @@ int main(int argc, char *argv[]){
             }
     }
 
-    int grid_size = width * height;
-    bool *initial_state = (bool*)calloc(grid_size, sizeof(bool));
-
-    if(randomize_grid){
-        if(seed == 0)
-            seed = time(NULL);
-
-        std::mt19937 generator(seed);
-
-        for(int i = 0; i < grid_size; i++){
-            initial_state[i] = generator()%2;
-        }
-    }
-    else {    /* For now make every other cell alive */
-        for(int i = 0; i < grid_size; i++){
-            initial_state[i] = i%2;
-        }
+    /* parse non-option arguments */
+    for (int i = optind; i < argc; i++){
+        file_specified = true;
+        filename = argv[i];
+        break;    /* ignore remaining args */
     }
 
-    if(return_seed)
-        fprintf(stdout, "Seed: %ld\n", seed);
+    bool *initial_state;
+
+    if(file_specified){
+        load_file(filename.c_str(), initial_state, width, height);
+    }
+    else {
+        int grid_size = width * height;
+        initial_state = (bool*)calloc(grid_size, sizeof(bool));
+        if(randomize_grid){
+            if(seed == 0)
+                seed = time(NULL);
+
+            std::mt19937 generator(seed);
+
+            for(int i = 0; i < grid_size; i++)
+                initial_state[i] = generator()%2;
+        }
+        else {    /* For now make every other cell alive */
+            for(int i = 0; i < grid_size; i++)
+                initial_state[i] = i%2;
+        }
+
+        if(return_seed)
+            fprintf(stdout, "Seed: %ld\n", seed);
+    }
 
     GameOfLife gol(width, height, cell_size, initial_state);
 
