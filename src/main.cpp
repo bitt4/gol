@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
     int width = 17;
     int height = 17;
     int cell_size = 50;
-    int SPEED = 1;                  /* Updates per second */
+    int speed = 1;                  /* Updates per second */
 
     static struct option long_options[] = {
                                            {"random", no_argument, NULL, 'r'},
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]){
                 cell_size = parse_option_as_number(optarg, 4);    /* implicit cast from long to int */
                 break;
             case 'v':
-                SPEED = parse_option_as_number(optarg, 4, true);  /* implicit cast from long to int */
+                speed = parse_option_as_number(optarg, 4, true);  /* implicit cast from long to int */
                 break;
             case '?':
                 /* display help, not fully implemented yet */
@@ -180,16 +180,16 @@ int main(int argc, char *argv[]){
                         case SDLK_PLUS:              /* This virtual key does not have corresponding physical key, :(   */
                         case SDLK_EQUALS:            /* When I press `Shift` and `=` keys, it writes `+`                */
                         case SDLK_KP_PLUS:
-                            if(SPEED < 1000)         /* upper limit of 1000 updates per second */
-                                SPEED += 1;
+                            if(speed < 1000)         /* upper limit of 1000 updates per second */
+                                speed += 1;
                             break;
                         case SDLK_KP_MINUS:
                         case SDLK_MINUS:
-                            if(SPEED > 0)            /* lower limit of 0 updates per second, the game stops here */
-                                SPEED -= 1;
+                            if(speed > 0)            /* lower limit of 0 updates per second, the game stops here */
+                                speed -= 1;
                             break;
-                        case SDLK_SPACE:             /* If the SPEED was not equal to 0, set it to 0 */
-                            SPEED = !SPEED;          /* If the SPEED was equal to 0, set it to 1     */
+                        case SDLK_SPACE:             /* If the speed was not equal to 0, set it to 0 */
+                            speed = !speed;          /* If the speed was equal to 0, set it to 1     */
                             break;
                     }
             default: {}
@@ -197,10 +197,10 @@ int main(int argc, char *argv[]){
         }
 
         int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs for more than ~49 days      */
-        if(SPEED != 0 && time_now > last_time + 1000 / SPEED){
+        if(speed != 0 && time_now > last_time + 1000 / speed){
             gol.render(renderer);                   /* Use this instead of sleep(ms), because I want to detect keypresses and */
             SDL_RenderPresent(renderer);            /* events faster. If sleep() function would be used, event handlers would */
-            gol.update();                           /* be delayed. This basically updates game every `1000 / SPEED` ms, but   */
+            gol.update();                           /* be delayed. This basically updates game every `1000 / speed` ms, but   */
             last_time = time_now;                   /* processes events every iteration of the main game loop                 */
         }
     }
