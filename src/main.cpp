@@ -13,6 +13,7 @@
 
 #include "GameOfLifeParseFile.cpp"
 
+void print_help();
 long int parse_option_as_number(const char* arg, int max_length, bool allow_zero = false);
 
 int main(int argc, char *argv[]){
@@ -52,20 +53,20 @@ int main(int argc, char *argv[]){
     int speed = 1;                  /* Updates per second */
 
     static struct option long_options[] = {
-                                           {"random", no_argument, NULL, 'r'},
                                            {"width", required_argument, NULL, 'w'},
                                            {"height", required_argument, NULL, 'h'},
-                                           {"seed", optional_argument, NULL, 's'},
                                            {"cell-size", required_argument, NULL, 'c'},
+                                           {"random", no_argument, NULL, 'r'},
+                                           {"seed", optional_argument, NULL, 's'},
                                            {"speed", required_argument, NULL, 'v'},         /* v as in velocity */
-                                           {"help", no_argument, NULL, '?'},
+                                           {"help", no_argument, NULL, 'H'},
                                            {NULL, 0, NULL, 0}
     };
 
     int c;
 
     /* Parse command-line arguments, NOT YET COMPLETE */
-    while ((c = getopt_long(argc, argv, "rw:h:sc:v:?", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "rw:h:sc:v:H", long_options, NULL)) != -1) {
         switch (c)
             {
             case 'r':
@@ -91,11 +92,14 @@ int main(int argc, char *argv[]){
             case 'v':
                 speed = parse_option_as_number(optarg, 4, true);  /* implicit cast from long to int */
                 break;
+            case 'H':
+                print_help();
+                exit(EXIT_FAILURE);
             case '?':
                 /* display help, not fully implemented yet */
-                fprintf(stderr,
-                        "%s: Use -h or --help to display options.\n", argv[0]);
-                exit(EXIT_FAILURE);
+                fprintf(stderr,                                                    /* Yeah, upprcase 'H' is a bit uncommon */
+                        "%s: Use -H or --help to display options.\n", argv[0]);    /* for the help command, but lowercase  */
+                exit(EXIT_FAILURE);                                                /* 'h' is used for 'height' argument    */
             default: {}
             }
     }
@@ -241,4 +245,42 @@ long int parse_option_as_number(const char* arg, int max_length, bool allow_zero
     }
 
     return value;
+}
+
+void print_help(){
+    fprintf(stdout,
+            "Usage: gol [OPTIONS] ... [FILE] ...\n"
+            "FILE represents template for initial grid\n"
+            "\n"
+            "Options:\n"
+            "  -w, --width=NUM       Width of grid in cells\n"
+            "  -h, --height=NUM      Height of grid in cells\n"
+            "  -c, --cell-size=NUM   Size of cell in pixels\n"
+            "  -r, --random          Randomize initial grid\n"
+            "  -s, --seed=[NUM]      Set seed for random number generator if specified,\n"
+            "                        otherwise display seed for generated grid\n"
+            "  -v, --speed=NUM       How many times per second will the grid be updated\n"
+            "  -?, --help            Display this message\n"
+            "\n"
+            "Example:\n"
+            "  gol -w 100 -h 100 -c 5 -r -s -v 30   Generate a grid 100 cells wide, 100 cells\n"
+            "                                       tall, cells will have 5px, randomize the\n"
+            "                                       grid, print seed from rng, and the grid\n"
+            "                                       will update 30 times per second\n"
+            "\n"
+            "Grid FILE:\n"
+            "  0 or ' ' specifies a dead cell, any other character specifies a living cell.\n"
+            "  Width and height of the grid are extracted from grid file. Length of the\n"
+            "  longest line will become width of the grid. Height of the grid is specified\n"
+            "  by the number of lines in the file. If there's a trailing newline at the end\n"
+            "  of the file, it won't be counted.\n"
+            "  Width and height specified by command-line arguments are overriden by the width\n"
+            "  and height of the FILE.\n"
+            "Example:\n\n"
+            "    000000\n"
+            "    000100\n"
+            "    010100\n"
+            "    001100\n"
+            "    000000\n"
+            "    000000\n");
 }
