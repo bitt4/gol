@@ -143,7 +143,7 @@ int main(int argc, char *argv[]){
                                           SDL_WINDOW_SHOWN);
 
     if(window == NULL){
-        std::cerr << "Window creation failed: " << SDL_GetError() << "\n";
+        fprintf(stderr, "Window creation failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
@@ -157,7 +157,7 @@ int main(int argc, char *argv[]){
                                                 SDL_RENDERER_SOFTWARE);
 
     if(renderer == NULL){
-        std::cerr << "Renderer creation failed: " << SDL_GetError() << "\n";
+        fprintf(stderr, "Renderer creation failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
 
