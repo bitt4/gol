@@ -22,6 +22,18 @@ make
 
 ### Options
 
+Use `gol FILE` to load initial layout of game of life from file.
+```bash
+$ cat glider.grid # for example
+000000
+000100
+010100
+001100
+000000
+000000
+$ ./gol glider.grid
+```
+
 | Option                   | Effect                               |
 |--------------------------|--------------------------------------|
 |`-w`, `--width=NUM`       | Set width of the grid in cells       |
@@ -38,6 +50,13 @@ make
 | <kbd>SPACE</kbd>               | Toggle pause   |
 | <kbd>+</kbd>,<kbd>=</kbd>      | Increase speed |
 | <kbd>-</kbd>                   | Decrease speed |
+
+### Grid files
+You can specify initial layout of game of life with files:
+ - '0' or ' ' specify dead cells, other characters specify living cells
+ - The longest line in the grid file sets width of the grid
+ - Number of lines in the grid file sets height of the grid, but trailing newline at the end of file is ignored
+ - Width and height specified by command-line options are overriden by width and height extracted from the grid file
 
 ## Example
 Example of Pulsar oscillator pattern:
