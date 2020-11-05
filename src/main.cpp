@@ -21,7 +21,6 @@ int main(int argc, char *argv[]){
     SDL_Init(SDL_INIT_VIDEO);
 
     /* Default options */
-    bool randomize_grid = false;
     bool return_seed = false;
     bool file_specified = false;
     std::string filename;
@@ -35,7 +34,6 @@ int main(int argc, char *argv[]){
                                            {"width", required_argument, NULL, 'w'},
                                            {"height", required_argument, NULL, 'h'},
                                            {"cell-size", required_argument, NULL, 'c'},
-                                           {"random", no_argument, NULL, 'r'},
                                            {"seed", optional_argument, NULL, 's'},
                                            {"speed", required_argument, NULL, 'v'},         /* v as in velocity */
                                            {"help", no_argument, NULL, 'H'},
@@ -45,12 +43,9 @@ int main(int argc, char *argv[]){
     int c;
 
     /* Parse command-line arguments, NOT YET COMPLETE */
-    while ((c = getopt_long(argc, argv, "rw:h:sc:v:H", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "w:h:sc:v:H", long_options, NULL)) != -1) {
         switch (c)
             {
-            case 'r':
-                randomize_grid = true;
-                break;
             case 'w':
                 width = parse_option_as_number(optarg, 4);        /* implicit cast from long to int */
                 break;
@@ -60,7 +55,6 @@ int main(int argc, char *argv[]){
             case 's':
                 if(optarg){
                     seed = (unsigned)parse_option_as_number(optarg, 20);
-                    randomize_grid = true;                        /* randomize the grid, since the seed for prng was provided */
                 }
                 else
                     return_seed = true;
@@ -98,19 +92,14 @@ int main(int argc, char *argv[]){
     else {
         int grid_size = width * height;
         initial_state = (bool*)calloc(grid_size, sizeof(bool));
-        if(randomize_grid){
-            if(seed == 0)
-                seed = time(NULL);
 
-            std::mt19937 generator(seed);
+        if(seed == 0)    /* If the seed isn't specified in command-line arguments */
+            seed = time(NULL);    /* set seed for rng */
 
-            for(int i = 0; i < grid_size; i++)
-                initial_state[i] = generator()%2;
-        }
-        else {    /* For now make every other cell alive */
-            for(int i = 0; i < grid_size; i++)
-                initial_state[i] = i%2;
-        }
+        std::mt19937 generator(seed);
+
+        for(int i = 0; i < grid_size; i++)
+            initial_state[i] = generator()%2;
 
         if(return_seed)
             fprintf(stdout, "Seed: %ld\n", seed);
@@ -235,17 +224,16 @@ void print_help(){
             "  -w, --width=NUM       Width of grid in cells\n"
             "  -h, --height=NUM      Height of grid in cells\n"
             "  -c, --cell-size=NUM   Size of cell in pixels\n"
-            "  -r, --random          Randomize initial grid\n"
             "  -s, --seed=[NUM]      Set seed for random number generator if specified,\n"
             "                        otherwise display seed for generated grid\n"
             "  -v, --speed=NUM       How many times per second will the grid be updated\n"
             "  -?, --help            Display this message\n"
             "\n"
             "Example:\n"
-            "  gol -w 100 -h 100 -c 5 -r -s -v 30   Generate a grid 100 cells wide, 100 cells\n"
-            "                                       tall, cells will have 5px, randomize the\n"
-            "                                       grid, print seed from rng, and the grid\n"
-            "                                       will update 30 times per second\n"
+            "  gol -w 100 -h 100 -c 5 -s -v 30      Generate a grid 100 cells wide, 100 cells\n"
+            "                                       tall, cells will have 5px, print seed\n"
+            "                                       from rng, and the grid will update\n"
+            "                                       30 times per second\n"
             "\n"
             "Controls:\n"
             "  SPACE                 Pause/Resume the game\n"
