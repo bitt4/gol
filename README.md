@@ -36,14 +36,14 @@ $ cat glider.grid # for example
 $ ./gol glider.grid
 ```
 
-| Option                |Effect                                                                      |Default value|
-|-----------------------|----------------------------------------------------------------------------|-------------|
-|`-w`, `--width=NUM`    |Set width of the grid in cells                                              |128          |
-|`-h`, `--height=NUM`   |Set height of the grid in cells                                             |128          |
-|`-c`, `--cell-size=NUM`|Size of cell in pixels                                                      |5            |
-|`-s`, `--seed=[NUM]`   |Set seed for random number generator, return generated seed if not specified|current time |
-|`-v`, `--speed=NUM`    |Grid update frequency                                                       |1            |
-|`-H`, `--help`         |Display help                                                                |             |
+| Option                |Effect                                                  |Default value|
+|-----------------------|--------------------------------------------------------|-------------|
+|`-w`, `--width=NUM`    |Set width of the grid in cells                          |128          |
+|`-h`, `--height=NUM`   |Set height of the grid in cells                         |128          |
+|`-c`, `--cell-size=NUM`|Size of cell in pixels                                  |5            |
+|`-s`, `--seed=[NUM]`   |Set seed for rng, return generated seed if not specified|current time |
+|`-v`, `--speed=NUM`    |Grid update frequency                                   |1            |
+|`-H`, `--help`         |Display help                                            |             |
 
 ### Key bindings
 
