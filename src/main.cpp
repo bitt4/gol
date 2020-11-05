@@ -227,7 +227,7 @@ void print_help(){
             "  -s, --seed=[NUM]      Set seed for random number generator if specified,\n"
             "                        otherwise display seed for generated grid\n"
             "  -v, --speed=NUM       How many times per second will the grid be updated\n"
-            "  -?, --help            Display this message\n"
+            "  -H, --help            Display this message\n"
             "\n"
             "Example:\n"
             "  gol -w 100 -h 100 -c 5 -s -v 30      Generate a grid 100 cells wide, 100 cells\n"
