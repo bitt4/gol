@@ -2,8 +2,6 @@
 
 [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), also known simply as Life, is a cellular automaton made by the British mathematician John Horton Conway in 1970.
 
-##
-
 ## Installation
 
 ### Dependencies
