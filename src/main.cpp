@@ -138,6 +138,7 @@ int main(int argc, char *argv[]){
     gol.update();                   /* And update it */
 
     int last_time = 0;
+    bool paused = (speed == 0);
     bool quit = false;
     SDL_Event e;
 
@@ -160,8 +161,11 @@ int main(int argc, char *argv[]){
                             if(speed > 0)            /* lower limit of 0 updates per second, the game stops here */
                                 speed -= 1;
                             break;
-                        case SDLK_SPACE:             /* If the speed was not equal to 0, set it to 0 */
-                            speed = !speed;          /* If the speed was equal to 0, set it to 1     */
+                        case SDLK_SPACE:
+                            if(speed == 0){
+                                speed = 1;
+                            }
+                            paused = !paused;
                             break;
                     }
             default: {}
@@ -169,7 +173,7 @@ int main(int argc, char *argv[]){
         }
 
         int time_now = SDL_GetTicks();              /* this value will wrap over if the game runs for more than ~49 days      */
-        if(speed != 0 && time_now > last_time + 1000 / speed){
+        if(!paused && speed != 0 && time_now > last_time + 1000 / speed){
             gol.render(renderer);                   /* Use this instead of sleep(ms), because I want to detect keypresses and */
             SDL_RenderPresent(renderer);            /* events faster. If sleep() function would be used, event handlers would */
             gol.update();                           /* be delayed. This basically updates game every `1000 / speed` ms, but   */
