@@ -20,8 +20,6 @@ make
 
 ## Usage
 
-### Options
-
 Running `gol` with no options will generate random grid.
 
 Use `gol FILE` to load initial layout of game of life from file.
@@ -36,6 +34,7 @@ $ cat glider.grid # for example
 $ ./gol glider.grid
 ```
 
+### Options
 | Option                |Effect                                                  |Default value|
 |-----------------------|--------------------------------------------------------|-------------|
 |`-w`, `--width=NUM`    |Set width of the grid in cells                          |128          |
