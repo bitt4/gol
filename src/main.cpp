@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
                 break;
             case 's':
                 if(optarg){
-                    seed = (unsigned)parse_option_as_number(optarg, 20);
+                    seed = (unsigned)parse_option_as_number(optarg, 20, true);
                 }
                 else
                     return_seed = true;
