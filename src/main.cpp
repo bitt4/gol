@@ -15,6 +15,7 @@
 
 void print_help();
 long int parse_option_as_number(const char* arg, int max_length, bool allow_zero = false);
+void load_random_grid(bool *&destination_grid, int width, int height, time_t &seed);
 
 int main(int argc, char *argv[]){
 
@@ -25,9 +26,9 @@ int main(int argc, char *argv[]){
     bool file_specified = false;
     std::string filename;
     time_t seed = 0;
-    int width = 128;
-    int height = 128;
-    int cell_size = 5;
+    int width = 64;
+    int height = 64;
+    int cell_size = 10;
     int speed = 1;                  /* Updates per second */
 
     static struct option long_options[] = {
@@ -42,7 +43,6 @@ int main(int argc, char *argv[]){
 
     int c;
 
-    /* Parse command-line arguments, NOT YET COMPLETE */
     while ((c = getopt_long(argc, argv, "w:h:sc:v:H", long_options, NULL)) != -1) {
         switch (c)
             {
@@ -69,7 +69,6 @@ int main(int argc, char *argv[]){
                 print_help();
                 exit(EXIT_FAILURE);
             case '?':
-                /* display help, not fully implemented yet */
                 fprintf(stderr,                                                    /* Yeah, upprcase 'H' is a bit uncommon */
                         "%s: Use -H or --help to display options.\n", argv[0]);    /* for the help command, but lowercase  */
                 exit(EXIT_FAILURE);                                                /* 'h' is used for 'height' argument    */
@@ -90,16 +89,7 @@ int main(int argc, char *argv[]){
         load_file(filename.c_str(), initial_state, width, height);
     }
     else {
-        int grid_size = width * height;
-        initial_state = (bool*)calloc(grid_size, sizeof(bool));
-
-        if(seed == 0)    /* If the seed isn't specified in command-line arguments */
-            seed = time(NULL);    /* set seed for rng */
-
-        std::mt19937 generator(seed);
-
-        for(int i = 0; i < grid_size; i++)
-            initial_state[i] = generator()%2;
+        load_random_grid(initial_state, width, height, seed);
 
         if(return_seed)
             fprintf(stdout, "Seed: %ld\n", seed);
@@ -259,4 +249,17 @@ void print_help(){
             "    001100\n"
             "    000000\n"
             "    000000\n");
+}
+
+void load_random_grid(bool *&destination_grid, int width, int height, time_t &seed){
+    int grid_size = width * height;
+    destination_grid = (bool*)calloc(grid_size, sizeof(bool));
+
+    if(seed == 0)    /* If the seed isn't specified in command-line arguments */
+        seed = time(NULL);    /* set seed for rng */
+
+    std::mt19937 generator(seed);
+
+    for(int i = 0; i < grid_size; i++)
+        destination_grid[i] = generator()%2;
 }
