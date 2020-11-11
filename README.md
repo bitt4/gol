@@ -37,9 +37,9 @@ $ ./gol glider.grid
 ### Options
 | Option                |Effect                                                  |Default value|
 |-----------------------|--------------------------------------------------------|-------------|
-|`-w`, `--width=NUM`    |Set width of the grid in cells                          |128          |
-|`-h`, `--height=NUM`   |Set height of the grid in cells                         |128          |
-|`-c`, `--cell-size=NUM`|Size of cell in pixels                                  |5            |
+|`-w`, `--width=NUM`    |Set width of the grid in cells                          |64           |
+|`-h`, `--height=NUM`   |Set height of the grid in cells                         |64           |
+|`-c`, `--cell-size=NUM`|Size of cell in pixels                                  |10           |
 |`-s`, `--seed=[NUM]`   |Set seed for rng, return generated seed if not specified|current time |
 |`-v`, `--speed=NUM`    |Grid update frequency                                   |1            |
 |`-H`, `--help`         |Display help                                            |             |
