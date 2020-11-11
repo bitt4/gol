@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
     bool return_seed = false;
     bool file_specified = false;
     std::string filename;
-    time_t seed = 0;
+    time_t seed = -1;
     int width = 64;
     int height = 64;
     int cell_size = 10;
@@ -255,7 +255,7 @@ void load_random_grid(bool *&destination_grid, int width, int height, time_t &se
     int grid_size = width * height;
     destination_grid = (bool*)calloc(grid_size, sizeof(bool));
 
-    if(seed == 0)    /* If the seed isn't specified in command-line arguments */
+    if(seed == -1)    /* If the seed isn't specified in command-line arguments */
         seed = time(NULL);    /* set seed for rng */
 
     std::mt19937 generator(seed);
