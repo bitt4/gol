@@ -26,9 +26,9 @@ int main(int argc, char *argv[]){
     bool file_specified = false;
     std::string filename;
     time_t seed = -1;
-    int width = 64;
-    int height = 64;
-    int cell_size = 10;
+    int width = 32;
+    int height = 32;
+    int cell_size = 20;
     int speed = 1;                  /* Updates per second */
 
     static struct option long_options[] = {

@@ -30,9 +30,3 @@
 *.exe
 *.out
 *.app
-
-# Game of Life files
- # Seed files (they store seeds for rng)
-*.seed
- # Grid files (they store grids)
-*.grid
