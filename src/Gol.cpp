@@ -82,12 +82,14 @@ void GameOfLife::update(){
 
 void GameOfLife::render(SDL_Renderer* renderer){
     for(int y = 0; y < this->height; y++){
-        for(int x = 0; x < this->width; x++){
-            if(this->rendered_grid[y * this->width + x]){             /* if the cell is alive          */
-                draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
-            }
-            else {
-                draw_cell(renderer, x, y, this->background_color);    /* otherwise draw the background */
+        for(int x = 0; x < this->width; x++){                  /* Check if the cell changed its state*/
+            if(this->rendered_grid[y * this->width + x] != this->comparison_grid[y * this->width + x]){
+                if(this->rendered_grid[y * this->width + x]){             /* if the cell is alive          */
+                    draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
+                }
+                else {
+                    draw_cell(renderer, x, y, this->background_color);    /* otherwise draw the background */
+                }
             }
         }
     }
