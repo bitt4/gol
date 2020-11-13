@@ -154,7 +154,8 @@ int main(int argc, char *argv[]){
                             if(speed == 0){
                                 speed = 1;
                             }
-                            paused = !paused;
+                            else
+                                paused = !paused;
                             break;
                     }
             default: {}
