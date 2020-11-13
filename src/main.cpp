@@ -153,6 +153,7 @@ int main(int argc, char *argv[]){
                         case SDLK_SPACE:
                             if(speed == 0){
                                 speed = 1;
+                                paused = false;
                             }
                             else
                                 paused = !paused;
