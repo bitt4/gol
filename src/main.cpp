@@ -46,10 +46,10 @@ int main(int argc, char *argv[]){
         switch (c)
             {
             case 'w':
-                width = parse_option_as_number(optarg, 4);        /* implicit cast from long to int */
+                width = static_cast<int>(parse_option_as_number(optarg, 4));        /* implicit cast from long to int */
                 break;
             case 'h':
-                height = parse_option_as_number(optarg, 4);       /* implicit cast from long to int */
+                height = static_cast<int>(parse_option_as_number(optarg, 4));       /* implicit cast from long to int */
                 break;
             case 's':
                 if(optarg){
@@ -59,10 +59,10 @@ int main(int argc, char *argv[]){
                     return_seed = true;
                 break;
             case 'c':
-                cell_size = parse_option_as_number(optarg, 4);    /* implicit cast from long to int */
+                cell_size = static_cast<int>(parse_option_as_number(optarg, 4));    /* implicit cast from long to int */
                 break;
             case 'v':
-                speed = parse_option_as_number(optarg, 4, true);  /* implicit cast from long to int */
+                speed = static_cast<int>(parse_option_as_number(optarg, 4, true));  /* implicit cast from long to int */
                 break;
             case 'H':
                 print_help();
@@ -172,7 +172,7 @@ int main(int argc, char *argv[]){
         }
     }
 
-    free(initial_state);
+    delete[] initial_state;
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
@@ -200,7 +200,7 @@ long int parse_option_as_number(const char* arg, int max_length, bool allow_zero
     if(value == 0)
         length = 1;
     else
-        length = (int)log10(value) + 1;    /* calculate the length of a number */
+        length = static_cast<int>(log10(value)) + 1;    /* calculate the length of a number */
 
     if(length > max_length){
         fprintf(stderr, "Invalid argument: %s is too big\n", arg);
@@ -254,7 +254,7 @@ void print_help(){
 
 void load_random_grid(bool *&destination_grid, int width, int height, time_t &seed){
     int grid_size = width * height;
-    destination_grid = (bool*)calloc(grid_size, sizeof(bool));
+    destination_grid = new bool[grid_size]();
 
     if(seed == -1)    /* If the seed isn't specified in command-line arguments */
         seed = time(NULL);    /* set seed for rng */

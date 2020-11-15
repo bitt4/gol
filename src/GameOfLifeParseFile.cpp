@@ -59,7 +59,7 @@ void load_file(const char* filename, bool *&destination_grid, int &grid_width_de
 
             /* allocate memory for grid */
             int grid_size = grid_width * grid_height;
-            destination_grid = (bool*)calloc(grid_size, sizeof(bool));
+            destination_grid = new bool[grid_size]();
 
             grid_file.clear();    /* Make file stream readable again from the beginning */
             grid_file.seekg(0, grid_file.beg);

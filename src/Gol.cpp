@@ -9,15 +9,15 @@ GameOfLife::GameOfLife(int width, int height, int cell_width, bool* initial_stat
 {
     int size_of_grid = width * height;
 
-    this->rendered_grid = (bool*)calloc(size_of_grid, sizeof(bool));     /* allocate memory for 2 grids */
-    this->comparison_grid = (bool*)calloc(size_of_grid, sizeof(bool));
+    this->rendered_grid = new bool[size_of_grid]();     /* allocate memory for 2 grids */
+    this->comparison_grid = new bool[size_of_grid]();
 
     memcpy(rendered_grid, initial_state, size_of_grid);
 }
 
 GameOfLife::~GameOfLife(){
-    free(this->rendered_grid);
-    free(this->comparison_grid);
+    delete[] this->rendered_grid;
+    delete[] this->comparison_grid;
 }
 
 inline int mod(int a, int b){
