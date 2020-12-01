@@ -6,7 +6,7 @@ ifeq ($(OS),Windows_NT)
 endif
 
 LIBS +=-lSDL2main -lSDL2
-FLAGS +=-std=c++11 -O3 -Wall
+FLAGS +=-std=c++11 -O3 -Wall -pedantic
 
 EXE=gol
 
