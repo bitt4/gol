@@ -3,10 +3,18 @@
 GameOfLife::GameOfLife(int width, int height, int cell_width, bool* initial_state)
     :width(width),
      height(height),
-     cell_width(cell_width),
-     cell_color({.r = 255, .g = 0, .b = 0, .a = 255}),
-     background_color({.r = 0, .g = 0, .b = 0, .a = 255})
+     cell_width(cell_width)
 {
+    this->cell_color.r = 255;
+    this->cell_color.g = 0;
+    this->cell_color.b = 0;
+    this->cell_color.a = 255;
+
+    this->background_color.r = 0;
+    this->background_color.g = 0;
+    this->background_color.b = 0;
+    this->background_color.a = 255;
+
     int size_of_grid = width * height;
 
     this->rendered_grid = new bool[size_of_grid]();     /* allocate memory for 2 grids */
