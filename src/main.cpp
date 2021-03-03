@@ -46,10 +46,10 @@ int main(int argc, char *argv[]){
         switch (c)
             {
             case 'w':
-                width = static_cast<int>(parse_option_as_number(optarg, 4));        /* implicit cast from long to int */
+                width = static_cast<int>(parse_option_as_number(optarg, 4));
                 break;
             case 'h':
-                height = static_cast<int>(parse_option_as_number(optarg, 4));       /* implicit cast from long to int */
+                height = static_cast<int>(parse_option_as_number(optarg, 4));
                 break;
             case 's':
                 if(optarg){
@@ -59,10 +59,10 @@ int main(int argc, char *argv[]){
                     return_seed = true;
                 break;
             case 'c':
-                cell_size = static_cast<int>(parse_option_as_number(optarg, 4));    /* implicit cast from long to int */
+                cell_size = static_cast<int>(parse_option_as_number(optarg, 4));
                 break;
             case 'v':
-                speed = static_cast<int>(parse_option_as_number(optarg, 4, true));  /* implicit cast from long to int */
+                speed = static_cast<int>(parse_option_as_number(optarg, 4, true));
                 break;
             case 'H':
                 print_help();
