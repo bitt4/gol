@@ -1,6 +1,6 @@
 #include "Gol.hpp"
 
-GameOfLife::GameOfLife(int width, int height, int cell_width, bool* initial_state)
+GameOfLife::GameOfLife(int width, int height, int cell_width, bool*& initial_state)
     :width(width),
      height(height),
      cell_width(cell_width)
@@ -17,10 +17,8 @@ GameOfLife::GameOfLife(int width, int height, int cell_width, bool* initial_stat
 
     int size_of_grid = width * height;
 
-    this->rendered_grid = new bool[size_of_grid]();     /* allocate memory for 2 grids */
+    this->rendered_grid = initial_state;
     this->comparison_grid = new bool[size_of_grid]();
-
-    memcpy(rendered_grid, initial_state, size_of_grid);
 }
 
 GameOfLife::~GameOfLife(){
