@@ -60,7 +60,7 @@ You can specify initial layout of game of life with files:
  - Width and height specified by command-line options are overriden by width and height extracted from the grid file
 
 ## Example
-Example of Pulsar oscillator pattern:
+Example of Pulsar oscillator pattern:\
 ![](demo.gif)
 ```bash
 # pulsar.grid file
