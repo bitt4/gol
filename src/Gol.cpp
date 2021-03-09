@@ -22,7 +22,6 @@ GameOfLife::GameOfLife(int width, int height, int cell_width, bool*& initial_sta
 }
 
 GameOfLife::~GameOfLife(){
-    delete[] this->rendered_grid;
     delete[] this->comparison_grid;
 }
 
