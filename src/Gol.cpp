@@ -36,7 +36,8 @@ int GameOfLife::get_nearby_cells(int x, int y){
     for(int ry = -1; ry < 2; ry++){
         for(int rx = -1; rx < 2; rx++){        /* Use modulo to ensure that negative coordinates will warp over, e.g. y coord */
             if(!(rx == 0 && ry == 0)){         /* with value -2 will wrap over to -2 + height of grid (e.g. 4 for height = 6) */
-                if(this->comparison_grid[ mod(y + ry, this->height) * this->width + mod(x + rx, this->width) ])
+                bool cell = this->comparison_grid[ mod(y + ry, this->height) * this->width + mod(x + rx, this->width) ];
+                if(cell /* is alive */)
                     nearby_cells++;
             }
         }
@@ -64,22 +65,15 @@ void GameOfLife::update(){
         for(int x = 0; x < this->width; x++){
             int nearby_cells = get_nearby_cells(x, y);
             int current_cell_coords = y * this->width + x;
+            bool previous_cell = this->comparison_grid[current_cell_coords];
+            bool &current_cell = this->rendered_grid[current_cell_coords];
 
-            if(this->comparison_grid[current_cell_coords]            /* If the current cell is alive */
-               && nearby_cells >= 2                                  /* and if it has 2 or 3 living neighbour cells */
-               && nearby_cells <= 3)
-            {
-                this->rendered_grid[current_cell_coords] = true;     /* it will live on to next generation */
-            }
-
-            else if(!this->comparison_grid[current_cell_coords]      /* If the current cell is dead */
-                    && nearby_cells == 3)                            /* and it has exactly 3 living neighbour cells */
-            {
-                this->rendered_grid[current_cell_coords] = true;     /* it will become a living cell */
-            }
-
-            else {
-                this->rendered_grid[current_cell_coords] = false;    /* Any other cell dies */
+            if(previous_cell && nearby_cells >= 2 && nearby_cells <= 3){
+                current_cell = true;
+            } else if(!previous_cell && nearby_cells == 3){
+                current_cell = true;
+            } else {
+                current_cell = false;
             }
         }
     }
@@ -87,14 +81,17 @@ void GameOfLife::update(){
 
 void GameOfLife::render(SDL_Renderer* renderer){
     for(int y = 0; y < this->height; y++){
-        for(int x = 0; x < this->width; x++){                  /* Check if the cell changed its state*/
-            if(this->rendered_grid[y * this->width + x] != this->comparison_grid[y * this->width + x]){
-                if(this->rendered_grid[y * this->width + x]){             /* if the cell is alive          */
-                    draw_cell(renderer, x, y, this->cell_color);          /* draw it with cell_color       */
+        for(int x = 0; x < this->width; x++){
+            bool cell_before = this->comparison_grid[y * this->width + x];
+            bool cell_now = this->rendered_grid[y * this->width + x];
+
+            /* Check if the cell changed its state*/
+            if(cell_before != cell_now){
+                SDL_Color color = this->background_color;
+                if(cell_now /* is alive */){
+                    color = this->cell_color;
                 }
-                else {
-                    draw_cell(renderer, x, y, this->background_color);    /* otherwise draw the background */
-                }
+                draw_cell(renderer, x, y, color);
             }
         }
     }
