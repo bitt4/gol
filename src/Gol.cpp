@@ -1,4 +1,4 @@
-#include "Gol.hpp"
+#include "../include/Gol.hpp"
 
 GameOfLife::GameOfLife(int width, int height, int cell_width, bool*& initial_state)
     :width(width),

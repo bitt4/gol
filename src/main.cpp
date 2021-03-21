@@ -6,7 +6,7 @@
 #include <random>
 #include <getopt.h>
 
-#include "Gol.hpp"
+#include "../include/Gol.hpp"
 
 #define MAX(a, b) ((a)>(b)?(a):(b))
 
