@@ -12,7 +12,7 @@
 
 void print_help();
 long int parse_option_as_number(const char* arg, int max_length, bool allow_zero = false);
-void load_random_grid(bool *&destination_grid, int width, int height, time_t &seed);
+void load_random_grid(std::vector<bool> &destination_grid, int width, int height, time_t &seed);
 
 int main(int argc, char *argv[]){
 
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]){
         break;    /* ignore remaining args */
     }
 
-    bool *initial_state;
+    std::vector<bool> initial_state;
 
     if(file_specified){
         load_file(filename.c_str(), initial_state, width, height);
@@ -170,8 +170,6 @@ int main(int argc, char *argv[]){
         }
     }
 
-    delete[] initial_state;
-
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -250,9 +248,9 @@ void print_help(){
             "    000000\n");
 }
 
-void load_random_grid(bool *&destination_grid, int width, int height, time_t &seed){
+void load_random_grid(std::vector<bool> &destination_grid, int width, int height, time_t &seed){
     int grid_size = width * height;
-    destination_grid = new bool[grid_size]();
+    destination_grid.resize(grid_size);
 
     if(seed == -1)    /* If the seed isn't specified in command-line arguments */
         seed = time(NULL);    /* set seed for rng */
