@@ -1,6 +1,6 @@
 #include "../include/Gol.hpp"
 
-GameOfLife::GameOfLife(int width, int height, int cell_width, bool*& initial_state)
+GameOfLife::GameOfLife(int width, int height, int cell_width, const std::vector<bool>& initial_state)
     :m_width { width },
      m_height { height },
      m_cell_width { cell_width }
@@ -18,11 +18,11 @@ GameOfLife::GameOfLife(int width, int height, int cell_width, bool*& initial_sta
     int size_of_grid = width * height;
 
     m_rendered_grid = initial_state;
-    m_comparison_grid = new bool[size_of_grid]();
+    m_comparison_grid.resize(size_of_grid);
 }
 
-GameOfLife::~GameOfLife(){
-    delete[] m_comparison_grid;
+GameOfLife::~GameOfLife()
+{
 }
 
 inline int mod(int a, int b){
@@ -58,15 +58,14 @@ void GameOfLife::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color
 }
 
 void GameOfLife::update(){
-    int size_of_grid = m_width * m_height;
-    memcpy(m_comparison_grid, m_rendered_grid, size_of_grid);
+    m_comparison_grid = m_rendered_grid;
 
     for(int y = 0; y < m_height; y++){
         for(int x = 0; x < m_width; x++){
             int nearby_cells = get_nearby_cells(x, y);
             int current_cell_coords = y * m_width + x;
             bool previous_cell = m_comparison_grid[current_cell_coords];
-            bool &current_cell = m_rendered_grid[current_cell_coords];
+            auto&& current_cell = m_rendered_grid[current_cell_coords];
 
             if(previous_cell && nearby_cells >= 2 && nearby_cells <= 3){
                 current_cell = true;
@@ -82,8 +81,9 @@ void GameOfLife::update(){
 void GameOfLife::render(SDL_Renderer* renderer){
     for(int y = 0; y < m_height; y++){
         for(int x = 0; x < m_width; x++){
-            bool cell_before = m_comparison_grid[y * m_width + x];
-            bool cell_now = m_rendered_grid[y * m_width + x];
+            int current_position = y * m_width + x;
+            bool cell_before = m_comparison_grid[current_position];
+            bool cell_now = m_rendered_grid[current_position];
 
             /* Check if the cell changed its state*/
             if(cell_before != cell_now){
