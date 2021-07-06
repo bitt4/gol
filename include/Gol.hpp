@@ -4,12 +4,12 @@
 
 class GameOfLife {
 private:
-    int width, height;
-    int cell_width;
-    bool* rendered_grid;
-    bool* comparison_grid;
+    int m_width, m_height;
+    int m_cell_width;
+    bool* m_rendered_grid;
+    bool* m_comparison_grid;
 
-    SDL_Color cell_color, background_color;
+    SDL_Color m_cell_color, m_background_color;
 
     int get_nearby_cells(int x, int y);
     void draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color);

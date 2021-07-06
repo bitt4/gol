@@ -8,8 +8,6 @@
 
 #include "../include/Gol.hpp"
 
-#define MAX(a, b) ((a)>(b)?(a):(b))
-
 #include "GameOfLifeParseFile.cpp"
 
 void print_help();
