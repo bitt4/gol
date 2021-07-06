@@ -1,3 +1,5 @@
+#define MAX(a, b) (a) > (b) ? (a) : (b)
+
 void get_grid_dimensions_from_file_stream(std::ifstream &file_stream, int &grid_width_dest, int &grid_height_dest){
     int max_line_width = 0;
     int current_line_length = 0;
