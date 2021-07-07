@@ -16,8 +16,6 @@ void load_random_grid(std::vector<bool> &destination_grid, int width, int height
 
 int main(int argc, char *argv[]){
 
-    SDL_Init(SDL_INIT_VIDEO);
-
     /* Default options */
     bool return_seed = false;
     bool file_specified = false;
@@ -51,7 +49,7 @@ int main(int argc, char *argv[]){
                 break;
             case 's':
                 if(optarg){
-                    seed = (unsigned)parse_option_as_number(optarg, 20, true);
+                    seed = static_cast<unsigned>(parse_option_as_number(optarg, 20, true));
                 }
                 else
                     return_seed = true;
@@ -64,7 +62,7 @@ int main(int argc, char *argv[]){
                 break;
             case 'H':
                 print_help();
-                exit(EXIT_FAILURE);
+                exit(EXIT_SUCCESS);
             case '?':
                 fprintf(stderr,                                                    /* Yeah, upprcase 'H' is a bit uncommon */
                         "%s: Use -H or --help to display options.\n", argv[0]);    /* for the help command, but lowercase  */
@@ -74,11 +72,12 @@ int main(int argc, char *argv[]){
     }
 
     /* parse non-option arguments */
-    for (int i = optind; i < argc; i++){
+    if(optind < argc){
         file_specified = true;
-        filename = argv[i];
-        break;    /* ignore remaining args */
+        filename = argv[optind];
     }
+
+    SDL_Init(SDL_INIT_VIDEO);
 
     std::vector<bool> initial_state;
 

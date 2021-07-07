@@ -5,12 +5,12 @@
 
 class GameOfLife {
 private:
-    int m_width, m_height;
-    int m_cell_width;
+    const int m_width, m_height;
+    const int m_cell_width;
     std::vector<bool> m_rendered_grid;
     std::vector<bool> m_comparison_grid;
 
-    SDL_Color m_cell_color, m_background_color;
+    const SDL_Color m_cell_color, m_background_color;
 
     int get_nearby_cells(const int x, const int y) const;
     void draw_cell(SDL_Renderer* renderer, const int x, const int y, const SDL_Color &color) const;
