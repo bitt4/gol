@@ -12,11 +12,11 @@ private:
 
     SDL_Color m_cell_color, m_background_color;
 
-    int get_nearby_cells(int x, int y);
-    void draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color);
+    int get_nearby_cells(const int x, const int y) const;
+    void draw_cell(SDL_Renderer* renderer, const int x, const int y, const SDL_Color &color) const;
 public:
-    GameOfLife(int width, int height, int cell_width, const std::vector<bool>& initial_state);
+    GameOfLife(const int width, const int height, const int cell_width, const std::vector<bool>& initial_state);
     ~GameOfLife();
     void update();
-    void render(SDL_Renderer* renderer);
+    void render(SDL_Renderer* renderer) const;
 };

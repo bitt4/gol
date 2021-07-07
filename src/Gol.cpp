@@ -1,6 +1,6 @@
 #include "../include/Gol.hpp"
 
-GameOfLife::GameOfLife(int width, int height, int cell_width, const std::vector<bool>& initial_state)
+GameOfLife::GameOfLife(const int width, const int height, const int cell_width, const std::vector<bool>& initial_state)
     :m_width { width },
      m_height { height },
      m_cell_width { cell_width }
@@ -25,12 +25,12 @@ GameOfLife::~GameOfLife()
 {
 }
 
-inline int mod(int a, int b){
+inline int mod(const int a, const int b){
     int res = a % b;
     return res >= 0 ? res : res + b;
 }
 
-int GameOfLife::get_nearby_cells(int x, int y){
+int GameOfLife::get_nearby_cells(const int x, const int y) const {
     int nearby_cells = 0;
 
     for(int ry = -1; ry < 2; ry++){
@@ -46,7 +46,7 @@ int GameOfLife::get_nearby_cells(int x, int y){
     return nearby_cells;
 }
 
-void GameOfLife::draw_cell(SDL_Renderer* renderer, int x, int y, SDL_Color color){
+void GameOfLife::draw_cell(SDL_Renderer* renderer, const int x, const int y, const SDL_Color &color) const {
     SDL_Rect cell_rectangle;
     cell_rectangle.x = x * m_cell_width;
     cell_rectangle.y = y * m_cell_width;
@@ -78,7 +78,7 @@ void GameOfLife::update(){
     }
 }
 
-void GameOfLife::render(SDL_Renderer* renderer){
+void GameOfLife::render(SDL_Renderer* renderer) const {
     for(int y = 0; y < m_height; y++){
         for(int x = 0; x < m_width; x++){
             int current_position = y * m_width + x;
