@@ -39,36 +39,26 @@ int main(int argc, char *argv[]){
     int c;
 
     while ((c = getopt_long(argc, argv, "w:h:sc:v:H", long_options, NULL)) != -1) {
-        switch (c)
-            {
-            case 'w':
-                width = static_cast<int>(parse_option_as_number(optarg, 4));
-                break;
-            case 'h':
-                height = static_cast<int>(parse_option_as_number(optarg, 4));
-                break;
+        switch (c){
+            case 'w': width = static_cast<int>(parse_option_as_number(optarg, 4)); break;
+            case 'h': height = static_cast<int>(parse_option_as_number(optarg, 4)); break;
             case 's':
                 if(optarg){
                     seed = static_cast<unsigned>(parse_option_as_number(optarg, 20, true));
-                }
-                else
+                } else {
                     return_seed = true;
+                }
                 break;
-            case 'c':
-                cell_size = static_cast<int>(parse_option_as_number(optarg, 4));
-                break;
-            case 'v':
-                speed = static_cast<int>(parse_option_as_number(optarg, 4, true));
-                break;
-            case 'H':
-                print_help();
-                exit(EXIT_SUCCESS);
+            case 'c': cell_size = static_cast<int>(parse_option_as_number(optarg, 4)); break;
+            case 'v': speed = static_cast<int>(parse_option_as_number(optarg, 4, true)); break;
+            case 'H':                                                                   /* Yeah, upprcase 'H' is a bit uncommon */
+                print_help();                                                           /* for the help command, but lowercase  */
+                exit(EXIT_SUCCESS);                                                     /* 'h' is used for 'height' argument    */
             case '?':
-                fprintf(stderr,                                                    /* Yeah, upprcase 'H' is a bit uncommon */
-                        "%s: Use -H or --help to display options.\n", argv[0]);    /* for the help command, but lowercase  */
-                exit(EXIT_FAILURE);                                                /* 'h' is used for 'height' argument    */
+                fprintf(stderr, "%s: Use -H or --help to display options.\n", argv[0]);
+                exit(EXIT_FAILURE);
             default: {}
-            }
+        }
     }
 
     /* parse non-option arguments */
@@ -83,12 +73,12 @@ int main(int argc, char *argv[]){
 
     if(file_specified){
         load_file(filename.c_str(), initial_state, width, height);
-    }
-    else {
+    } else {
         load_random_grid(initial_state, width, height, seed);
 
-        if(return_seed)
+        if(return_seed){
             fprintf(stdout, "Seed: %ld\n", seed);
+        }
     }
 
     GameOfLife gol(width, height, cell_size, initial_state);
@@ -100,7 +90,7 @@ int main(int argc, char *argv[]){
                                           height * cell_size,
                                           SDL_WINDOW_SHOWN);
 
-    if(window == NULL){
+    if(window == nullptr){
         fprintf(stderr, "Window creation failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
@@ -114,7 +104,7 @@ int main(int argc, char *argv[]){
                                                 -1,
                                                 SDL_RENDERER_SOFTWARE);
 
-    if(renderer == NULL){
+    if(renderer == nullptr){
         fprintf(stderr, "Renderer creation failed: %s\n", SDL_GetError());
         return EXIT_FAILURE;
     }
@@ -136,27 +126,21 @@ int main(int argc, char *argv[]){
                     break;
                 case SDL_KEYDOWN:
                     switch(e.key.keysym.sym){
-                        case SDLK_PLUS:              /* This virtual key does not have corresponding physical key, :(   */
-                        case SDLK_EQUALS:            /* When I press `Shift` and `=` keys, it writes `+`                */
-                        case SDLK_KP_PLUS:
-                            if(speed < 1000)         /* upper limit of 1000 updates per second */
-                                speed += 1;
-                            break;
-                        case SDLK_KP_MINUS:
-                        case SDLK_MINUS:
-                            if(speed > 0)            /* lower limit of 0 updates per second, the game stops here */
-                                speed -= 1;
-                            break;
+                        case SDLK_PLUS:
+                        case SDLK_EQUALS:  /* upper limit of 1000 updates per second */
+                        case SDLK_KP_PLUS: if(speed < 1000) { speed += 1; } break;
+                        case SDLK_KP_MINUS:/* lower limit of 0 updates per second, the game stops here */
+                        case SDLK_MINUS:   if(speed > 0) { speed -= 1; } break;
                         case SDLK_SPACE:
                             if(speed == 0){
                                 speed = 1;
                                 paused = false;
-                            }
-                            else
+                            } else {
                                 paused = !paused;
+                            }
                             break;
                     }
-            default: {}
+                default: {}
             }
         }
 
@@ -185,18 +169,17 @@ long int parse_option_as_number(const char* arg, int max_length, bool allow_zero
             fprintf(stderr, "Invalid argument: %s is too small.\n", arg);
             exit(1);
         }
-    }
-    else if(value <= 0){       /* I don't think I want to allow negative values in any of the command-line arguments */
+    } else if(value <= 0){       /* I don't think I want to allow negative values in any of the command-line arguments */
         fprintf(stderr, "Invalid argument: %s is too small.\n", arg);
         exit(1);
     }
 
     int length;
-    if(value == 0)
+    if(value == 0){
         length = 1;
-    else
+    } else {
         length = static_cast<int>(log10(value)) + 1;    /* calculate the length of a number */
-
+    }
     if(length > max_length){
         fprintf(stderr, "Invalid argument: %s is too big\n", arg);
         exit(1);
@@ -251,11 +234,13 @@ void load_random_grid(std::vector<bool> &destination_grid, int width, int height
     int grid_size = width * height;
     destination_grid.resize(grid_size);
 
-    if(seed == -1)    /* If the seed isn't specified in command-line arguments */
-        seed = time(NULL);    /* set seed for rng */
+    if(seed == -1){    /* If the seed isn't specified in command-line arguments */
+        seed = time(nullptr);    /* set seed for rng */
+    }
 
     std::mt19937 generator(seed);
 
-    for(int i = 0; i < grid_size; i++)
+    for(int i = 0; i < grid_size; i++){
         destination_grid[i] = generator()%2;
+    }
 }
