@@ -15,7 +15,7 @@ private:
     int get_nearby_cells(const int x, const int y) const;
     void draw_cell(SDL_Renderer* renderer, const int x, const int y, const SDL_Color &color) const;
 public:
-    GameOfLife(const int width, const int height, const int cell_width, const std::vector<bool>& initial_state);
+    explicit GameOfLife(const int width, const int height, const int cell_width, const std::vector<bool>& initial_state);
     ~GameOfLife();
     void update();
     void render(SDL_Renderer* renderer) const;
